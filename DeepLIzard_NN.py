@@ -46,3 +46,9 @@ train_set = torchvision.datasets.FashionMNIST(
         transforms.ToTensor() #converts the data set into a tensor
     ])
 )
+
+train_loader = torch.utils.data.DataLoader(train_set 
+#loads data we have just created an instance of
+    ,batch_size=1000 #gets a batch of 1000
+    ,shuffle=True #shuffles the data
+)
