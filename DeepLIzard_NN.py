@@ -53,7 +53,32 @@ train_loader = torch.utils.data.DataLoader(train_set
     ,shuffle=True #shuffles the data
 )
 
+### Creating Neural Network Class ###
 
+class Network(nn.Module): 
+    #class is an extension of the nn.module class so inherits its methods
+    def __init__(self):
+        super().__init__() #same attritbtues as super class (nn.Module)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=6, kernel_size=5)
+        #first convolution layer (in channels equals colour channels of images)
+        self.conv2 = nn.Conv2d(in_channels=6, out_channels=12, kernel_size=5)
+        #second convolution layer (in channels matches out channels of first)
 
+        self.fc1 = nn.Linear(in_features=12*4*4, out_features=120)
+        #first linear layer
+        self.fc2 = nn.Linear(in_features=120, out_features=60)
+        #second linear layer
+        self.out = nn.Linear(in_features=60, out_features=10)
+        #final linear layer/ output layer
+
+    def forward(self, t):
+        # implement the forward pass
+        return t
+
+network = Network() #creates an instance of the network
+
+print(network) #will print the string representation of the network
+#can use netowork.layer to get the string representation of a layer
+#can used network.layer.weights so access the weights of a layer
 
 
