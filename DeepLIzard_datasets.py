@@ -1,5 +1,6 @@
 """
-DeepLizard Tutorial in making a neural network
+DeepLizard Tutorial in making a neural network.
+    Wokring with dataset object
 
 @author: George Hume
 
@@ -9,14 +10,6 @@ DeepLizard Tutorial in making a neural network
 
 import torch
 #The top-level PyTorch package and tensor library. 
-import torch.nn as nn
-#A subpackage that contains modules and extensible classes for building
-#neural networks. 
-import torch.optim as optim
-#A subpackage that contains standard optimization operations like SGD and Adam. 
-import torch.nn.functional as F
-#A functional interface that contains typical operations used for building
-#neural networks like loss functions and convolutions. 
 
 import torchvision
 #A package that provides access to popular datasets, model architectures, 
@@ -24,15 +17,9 @@ import torchvision
 import torchvision.transforms as transforms 
 #An interface that contains common transforms for image processing. 
 
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.metrics import confusion_matrix
-#from plotcm import plot_confusion_matrix
-#above is a local file that'll be used later
 
-import pdb #python debugger 
 
 torch.set_printoptions(linewidth=120) 
 #sets the print options for PyTorch print statements. 
@@ -53,6 +40,20 @@ train_loader = torch.utils.data.DataLoader(train_set
     ,shuffle=True #shuffles the data
 )
 
+print(train_set.targets.bincount()) 
+#number of samples in each class are equal so data set is balanced
+
+sample = next(iter(train_set))#iter converts train_set into a stream of data
+#next function gets next element in data stream
+
+print(len(sample)) 
+#length of element is two, as it contains image and label (both are tensors)
+
+image = sample[0].squeeze()
+#extraxts image from sample and squuezes to remove colour channel axis 
+
+#display image
+plt.imshow(image, cmap="gray")
 
 
 
