@@ -120,3 +120,19 @@ print(network) #will print the string representation of the network
 #can use netowork.layer to get the string representation of a layer
 #can used network.layer.weights so access the weights of a layer
 
+### Passing through a Single Image ###
+
+sample = next(iter(train_set)) #loads single image from training set
+image, label = sample #seperates image an label
+
+# Inserts an additional dimension that represents a batch of size 1
+# as network only accepts batches as inputs
+batch = image.unsqueeze(0)
+
+pred = network(batch) #makes a prediction by passing image through network
+# image shape needs to have shape (batch_size × in_channels × H × W)
+print(pred) #gives tesnor of length 10 with probabilites for each of the classes
+#predictions will be different with each call of the network as 
+#weights are assigned randomly
+print(torch.argmax(pred)) #gives most likely label
+print(label) #actual class of image
