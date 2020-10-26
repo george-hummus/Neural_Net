@@ -26,6 +26,10 @@ import torchvision
 import torchvision.transforms as transforms 
 #An interface that contains common transforms for image processing. 
 
+#tensorboard utility package that enables us to use TensorBoard with PyTorch.
+#enables us to create classes that can send data to tensorboard to display 
+from torch.utils.tensorboard import SummaryWriter
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -129,6 +133,16 @@ optimiser = optim.Adam(network.parameters(), lr=0.01)
 def get_num_correct(p, lbs): #finds the number ofpredictions that are correct
     return p.argmax(dim=1).eq(lbs).sum().item()
 
+### TensorBoard Implementation ###
+images, labels = next(iter(train_loader)) 
+#extracts images and labels so we can use them in tensorboard
+grid = torchvision.utils.make_grid(images) #turns image batch into gird of images
+
+tb = SummaryWriter() 
+#creates summary writer instance call tb, so we can pass data to tesnorboard
+tb.add_image('images', grid) #adds images to tensorboad
+tb.add_graph(network, images) #adds network graph to tesnor board
+
 ### Calculating the Loss ###
 for epoch in range(10): #loops thru for 10 epochs
     
@@ -154,7 +168,21 @@ for epoch in range(10): #loops thru for 10 epochs
         total_loss += loss.item()
         total_correct += get_num_correct(preds, labels)
         #increases the total loss and no. correct for the epoch from each batch
-     
+    
+    ## adding loss, number of correct preds, accuracy to tensorboard
+    tb.add_scalar('Loss', total_loss, epoch)
+    tb.add_scalar('Number Correct', total_correct, epoch)
+    tb.add_scalar('Accuracy', total_correct / len(train_set), epoch)
+    
+    ## adds histograms tp tensorboard
+    tb.add_histogram('conv1.bias', network.conv1.bias, epoch)
+    tb.add_histogram('conv1.weight', network.conv1.weight, epoch)
+    tb.add_histogram(
+        'conv1.weight.grad'
+        ,network.conv1.weight.grad
+        ,epoch
+    )
+    
     #prints out the total loss and no. of correct predictions at the 
     #end of the above loop
     print(
@@ -162,7 +190,3 @@ for epoch in range(10): #loops thru for 10 epochs
           'total_correct:', total_correct,
           'loss:', total_loss
           )
-
-
-
-
