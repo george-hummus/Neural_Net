@@ -9,7 +9,7 @@ DeepLizard Tutorial in making a neural network
 
 import torch
 #The top-level PyTorch package and tensor library. 
-torch.set_grad_enabled(False) #turns off computational graph for when not training
+torch.set_grad_enabled(True) #turns on/off computational graph needed for training
 
 import torch.nn as nn
 #A subpackage that contains modules and extensible classes for building
@@ -51,7 +51,7 @@ train_set = torchvision.datasets.FashionMNIST(
 
 train_loader = torch.utils.data.DataLoader(train_set 
 #loads data we have just created an instance of
-    ,batch_size=1000 #gets a batch of 1000
+    ,batch_size=100 #gets a batch of 100
     ,shuffle=True #shuffles the data
 )
 
@@ -119,4 +119,50 @@ network = Network() #creates an instance of the network
 print(network) #will print the string representation of the network
 #can use netowork.layer to get the string representation of a layer
 #can used network.layer.weights so access the weights of a layer
+
+#creating an optimiser to update the weights
+optimiser = optim.Adam(network.parameters(), lr=0.01)
+#passing in network parameters means optimiser can access gradients.
+#lr is the learning rate tells the optimizer how far to step in 
+#the direction of the loss function's minimum
+
+def get_num_correct(p, lbs): #finds the number ofpredictions that are correct
+    return p.argmax(dim=1).eq(lbs).sum().item()
+
+### Calculating the Loss ###
+for epoch in range(10): #loops thru for 10 epochs
+    
+    total_loss=0
+    total_correct=0
+    
+    for batch in train_loader: #gets a batch a loops through for each in train_loader
+    
+        images, labels = batch #sepparetes batch into images and labels
+        
+        preds = network(images) #passes batch through network
+        loss = F.cross_entropy(preds,labels) 
+        #calculates the loss using the cross entropy function
+        
+        optimiser.zero_grad()#zeros gradients before adding newly calculated ones
+    
+        #calculate the loss gradients
+        loss.backward() #calculates gradients
+        #gradients are used to update the weights
+    
+        optimiser.step() # Updating the weights using the gradients
+        
+        total_loss += loss.item()
+        total_correct += get_num_correct(preds, labels)
+        #increases the total loss and no. correct for the epoch from each batch
+     
+    #prints out the total loss and no. of correct predictions at the 
+    #end of the above loop
+    print(
+          'epoch:', epoch,
+          'total_correct:', total_correct,
+          'loss:', total_loss
+          )
+
+
+
 

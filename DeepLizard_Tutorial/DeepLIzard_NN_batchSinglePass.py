@@ -1,6 +1,6 @@
 """
 DeepLizard Tutorial in making a neural network
-    Trialling running a single image once through the network
+    Trialling running a single batch once through the network
 
 @author: George Hume
 
@@ -109,7 +109,7 @@ class Network(nn.Module):
         
         # (6) output layer
         t = self.out(t) #passes thrugh output layer
-        t = F.softmax(t, dim=1) #softmax returns a positive probability for 
+        #t = F.softmax(t, dim=1) #softmax returns a positive probability for 
         #each of the prediction classes, and the probabilities sum to 1. 
         #where the classes are from 0->9 and correspond to a different item of clothing.
         
@@ -121,19 +121,24 @@ print(network) #will print the string representation of the network
 #can use netowork.layer to get the string representation of a layer
 #can used network.layer.weights so access the weights of a layer
 
-### Passing through a Single Image ###
+data_loader = torch.utils.data.DataLoader(
+    train_set, batch_size=10
+    ) #loading a small batch of data to practice passing through the network
 
-sample = next(iter(train_set)) #loads single image from training set
-image, label = sample #seperates image an label
+batch = next(iter(data_loader)) #pulling batch of data from data_loader object
+images, labels = batch #separating images and labels in batch
 
-# Inserts an additional dimension that represents a batch of size 1
-# as network only accepts batches as inputs
-batch = image.unsqueeze(0)
+preds = network(images) #get preditions from the network
+#preds has size 10x10 as there are 10 prediction classes and 10 images in the batch
 
-pred = network(batch) #makes a prediction by passing image through network
-# image shape needs to have shape (batch_size × in_channels × H × W)
-print(pred) #gives tesnor of length 10 with probabilites for each of the classes
-#predictions will be different with each call of the network as 
-#weights are assigned randomly
-print(torch.argmax(pred)) #gives most likely label
-print(label) #actual class of image
+print(preds.argmax(dim=1)) #prints the class index that is the highest for each image
+#have to specify dimension 1 as that is where the probabilites are stored
+print(labels) #prints the actual class
+
+print(preds.argmax(dim=1).eq(labels)) #prints if predictions match the labels 
+
+print(preds.argmax(dim=1).eq(labels).sum().item()) 
+#prints how many predictions where correct
+
+
+
