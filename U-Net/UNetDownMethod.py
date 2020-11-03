@@ -137,5 +137,3 @@ print('original shape:', t.shape)
 
 out = U_net(t) #runs placeholder tensor through network
 print('final:',out.shape) #prints shape of output tesnor to see if U-net has worked
-
-
