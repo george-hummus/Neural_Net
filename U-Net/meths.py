@@ -16,6 +16,9 @@ torch.set_grad_enabled(True)
 import torch.nn as nn
 import torch.nn.functional as F
 
+from PIL import Image
+import numpy as np
+
 torch.set_printoptions(linewidth=120) 
 
 ### Constructing the methods of the U-net ###
@@ -141,3 +144,24 @@ class OutConv(nn.Module):
         
     def forward(self, x): #forward method of OutConv
         return self.conv(x) #does conv on tensor
+    
+    
+def ImLoad(file_name):
+    img = Image.open(file_name) #loads in TIFF file
+
+    imgArray = np.zeros((img.size[1], img.size[0], img.n_frames), np.float32)
+    #creates a balnk array to store TIFF frames in (32-bit float so compatible with pyTorch)
+    for I in range(img.n_frames):
+        img.seek(I)
+        imgArray[:, :, I] = np.asarray(img) 
+        #loops through TIFF frames and adds them to blank array
+    img.close()
+    
+    imgArray = np.transpose(imgArray, (2,0,1)) 
+    #changes array dimenisons so match that of tensors needed for pytorch
+    batch, height, width = imgArray.shape[0],imgArray.shape[1],imgArray.shape[2]
+    #assigns batch size, height and width of array to sepparte varibles
+    imgArray = torch.as_tensor(imgArray) #turns array into tensor
+    imgArray = imgArray.reshape(batch,1,height,width) #adds channel dimenion to tensor
+    return(imgArray)
+        

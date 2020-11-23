@@ -55,6 +55,8 @@ image = sample[0].squeeze()
 #display image
 plt.imshow(image, cmap="gray")
 
+im = image.numpy()
+
 
 
 

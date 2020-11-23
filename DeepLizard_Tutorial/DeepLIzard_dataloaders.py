@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 DeepLizard Tutorial in making a neural network.
     Wokring with DataLoader object, which eventually will be used within

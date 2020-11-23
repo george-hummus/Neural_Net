@@ -180,5 +180,6 @@ t = torch.ones([1,1,572,572]) #placeholder 4D tensor of all ones
 # [batch_size, channels, height, width]
 print('original shape:', t.shape)
 
+
 out = U_net(t) #runs placeholder tensor through network
 print('final:',out.shape) #prints shape of output tesnor to see if U-net has worked
