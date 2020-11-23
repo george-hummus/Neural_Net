@@ -106,12 +106,15 @@ U_net = Unet(1,1) #creates instance of the u-net
 #print('original shape:', t.shape)
 
 im = ImLoad('data/train_images.tif') #loads in TIFF training images as tensor
-plt.imshow(im[0].reshape([230,270])) #displays first image in batch
+plt.imshow(im[0].reshape([230,270]), cmap='gray') #displays first image in batch
+plt.show()
 print('original shape:', im.shape[0])
 
 out = U_net(im[0].reshape(1,1,230,270)) #runs first frame of tensor through network
 print('final:',out.shape) #prints shape of output tesnor to see if U-net has worked
 
-print(out.detach())
+print(out.detach()) #have to use deatch to make output into normal tensor
 #plt.imshow(im[0].reshape([230,270]), cmap="gray")
-plt.imshow(np.array(out.detach()).reshape([230,270]))
+plt.imshow(np.array(out.detach()).reshape([230,270]), cmap='gray')
+print(out.detach().min())
+print(out.detach().max())
