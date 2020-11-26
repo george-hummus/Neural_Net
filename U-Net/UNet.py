@@ -18,7 +18,8 @@ from meths import DuoCon
 from meths import Down
 from meths import Up
 from meths import OutConv
-from meths import BinStep
+from meths import BinStep #would be used as activation fucntion but can't 
+#differetiate it so can't be use to find gradients in training loop
 
 
 class Unet(nn.Module):
@@ -68,34 +69,26 @@ class Unet(nn.Module):
     ## defining the U-net's forward pass ##
     def forward(self, x):
         x1 = self.first(x) #first later is a single double convolution
-        print('D-layer1:', x1.shape) #prints tensor shape after 1st layer
         
         x2 = self.down1(x1) #second layer - is a down layer
-        print('D-layer2:', x2.shape) 
         
         x3 = self.down2(x2) #3rd layer
-        print('D-layer3:', x3.shape) 
         
         x4 = self.down3(x3) #4th layer
-        print('D-layer4:', x4.shape)
         
         x5 = self.down4(x4) #5th layer
-        print('D-layer5:', x5.shape)
         
         x = self.up1(x5,x4) #6th layer - is an Up layer
-        print('U-layer1:', x.shape)
         
         x = self.up2(x,x3) #7th layer
-        print('U-layer2:', x.shape)
         
         x = self.up3(x,x2) #8th layer
-        print('U-layer3:', x.shape)
         
         x = self.up4(x,x1) #9th layer
-        print('U-layer4:', x.shape)
         
         result = self.outc(x) #10th layer - is out layer
         
-        result = F.relu(F.tanh(result)) #binary step activation fucntion
+        result = F.relu(F.hardtanh(result,-0.1,0.1)) 
+        #approximation of binary step activation fucntion
         
         return result #returns the resulting tensor
