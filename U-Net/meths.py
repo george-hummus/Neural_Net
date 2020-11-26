@@ -144,8 +144,9 @@ class OutConv(nn.Module):
         
     def forward(self, x): #forward method of OutConv
         return self.conv(x) #does conv on tensor
-    
-    
+  
+
+## TIFF image loader and torch converter ##
 def ImLoad(file_name):
     img = Image.open(file_name) #loads in TIFF file
 
@@ -164,4 +165,10 @@ def ImLoad(file_name):
     imgArray = torch.as_tensor(imgArray) #turns array into tensor
     imgArray = imgArray.reshape(batch,1,height,width) #adds channel dimenion to tensor
     return(imgArray)
+
+## Binary Step Activation fucntion ##
+def BinStep(tensor):
+    result = (tensor >0)
+    result = torch.tensor(result, dtype=torch.uint8)
+    return result
         

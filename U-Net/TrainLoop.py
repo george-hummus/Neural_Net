@@ -25,7 +25,7 @@ images, maps = ImLoad('data/train_images.tif'), ImLoad('data/train_maps.tif')
 
 optimiser = optim.Adam(net.parameters(), lr=0.01)
 
-###Number correct function###
+### Number correct function ###
 
 def get_num_correct(Preds, Maps):
     
@@ -76,7 +76,3 @@ for epoch in range(10): #loops thru for 10 epochs
           'total_correct:', perc_correct,
           'loss:', total_loss
           )
-
-
-
-

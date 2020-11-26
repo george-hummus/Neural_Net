@@ -12,6 +12,7 @@ import torch
 torch.set_grad_enabled(True) 
 
 import torch.nn as nn
+import torch.nn.functional as F
 
 torch.set_printoptions(linewidth=120) 
 
@@ -21,6 +22,7 @@ from meths import Down
 from meths import Up
 from meths import OutConv
 from meths import ImLoad
+from meths import BinStep
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -93,6 +95,8 @@ class Unet(nn.Module):
         
         result = self.outc(x) #10th layer - is out layer
         
+        result = F.softplus(result)
+        
         return result #returns the resulting tensor
 
     
@@ -105,7 +109,7 @@ U_net = Unet(1,1) #creates instance of the u-net
 
 #print('original shape:', t.shape)
 
-im = ImLoad('data/train_images.tif') #loads in TIFF training images as tensor
+im = ImLoad('data/epi_norm.tif') #loads in TIFF training images as tensor
 plt.imshow(im[0].reshape([230,270]), cmap='gray') #displays first image in batch
 plt.show()
 print('original shape:', im.shape[0])

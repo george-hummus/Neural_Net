@@ -94,4 +94,6 @@ class Unet(nn.Module):
         
         result = self.outc(x) #10th layer - is out layer
         
+        ## try the ReLU function here (try other activaion functions too)
+        
         return result #returns the resulting tensor
