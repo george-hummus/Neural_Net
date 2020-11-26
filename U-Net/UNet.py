@@ -9,6 +9,7 @@ import torch
 torch.set_grad_enabled(True) 
 
 import torch.nn as nn
+import torch.nn.functional as F
 
 torch.set_printoptions(linewidth=120) 
 
@@ -17,6 +18,7 @@ from meths import DuoCon
 from meths import Down
 from meths import Up
 from meths import OutConv
+from meths import BinStep
 
 
 class Unet(nn.Module):
@@ -94,6 +96,6 @@ class Unet(nn.Module):
         
         result = self.outc(x) #10th layer - is out layer
         
-        ## try the ReLU function here (try other activaion functions too)
+        result = F.relu(F.tanh(result)) #binary step activation fucntion
         
         return result #returns the resulting tensor

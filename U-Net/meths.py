@@ -166,9 +166,29 @@ def ImLoad(file_name):
     imgArray = imgArray.reshape(batch,1,height,width) #adds channel dimenion to tensor
     return(imgArray)
 
+
 ## Binary Step Activation fucntion ##
 def BinStep(tensor):
-    result = (tensor >0)
-    result = torch.tensor(result, dtype=torch.uint8)
+    result = (tensor >0) #makes all values in tensor that are less than 0 
+    #equal False and all greater than zero equal True
+    result = result.float() 
+    #converts from boolean tensor to unsigned 8-bit integer tensor
     return result
+
+
+## Average percentage of pixels correct function ##
+def get_perc_correct(Preds, Maps):
+    
+    percs = [] #empty list to fill with percentages
+    for i in range(Preds.shape[0]): #loops through every image in batch
+        p,m = Preds[i,0,:,:],  Maps[i,0,:,:] #extracts first prediction and map
         
+        mask = (p == m)
+        #creates mask comapring if predictions and maps
+        num_correct = mask.sum().item()
+        #sums mask to find number of pixels that were correct
+        perc = (num_correct/(p.shape[0]*p.shape[1]))*100
+        #finds percentage of all pixels that where correct
+        percs.append(perc)
+        #adds percentage to list  
+    return np.mean(percs)

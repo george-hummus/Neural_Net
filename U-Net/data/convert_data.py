@@ -5,7 +5,6 @@ https://github.com/Slugskickass/Teaching_python/blob/master/Images/1.)%20Load%20
 """
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def loadtiffs(file_name):

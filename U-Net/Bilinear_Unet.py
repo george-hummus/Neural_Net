@@ -95,7 +95,7 @@ class Unet(nn.Module):
         
         result = self.outc(x) #10th layer - is out layer
         
-        result = F.softplus(result)
+        result = BinStep(result) #binary step activation fucntion
         
         return result #returns the resulting tensor
 
