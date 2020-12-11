@@ -10,9 +10,9 @@ torch.set_grad_enabled(True)
 import torch.optim as optim
 import torch.nn.functional as F
 
-from 2UNet import Unet
-from 1meths import ImLoad
-from 1meths import get_perc_correct
+from B_UNet import Unet
+from A_meths import ImLoad
+from A_meths import get_perc_correct
 
 from torch.utils.tensorboard import SummaryWriter
 torch.set_printoptions(linewidth=120)
