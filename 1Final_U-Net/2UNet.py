@@ -14,11 +14,11 @@ import torch.nn.functional as F
 torch.set_printoptions(linewidth=120) 
 
 #importing double convolution, Down layers, Up layers and Out layer from down method file
-from meths import DuoCon
-from meths import Down
-from meths import Up
-from meths import OutConv
-from meths import BinStep #would be used as activation fucntion but can't 
+from 1meths import DuoCon
+from 1meths import Down
+from 1meths import Up
+from 1meths import OutConv
+from 1meths import BinStep #would be used as activation fucntion but can't 
 #differetiate it so can't be use to find gradients in training loop
 
 
